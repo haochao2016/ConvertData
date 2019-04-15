@@ -1,14 +1,12 @@
 package com.dolphindb.importData
 
-import java.sql.Date
-import java.sql.Timestamp
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.sql.{Date, Timestamp}
 
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.sql.types._
 
 object WIN_writeToParquet {
+
 
   def main(args: Array[String]): Unit = {
 
@@ -19,7 +17,7 @@ object WIN_writeToParquet {
     import spark.implicits._
 
     val dataSchema = StructType(
-        StructField("symbol", StringType)
+      StructField("symbol", StringType)
         :: StructField("date", DateType)
         :: StructField("time", TimestampType)
         :: StructField("bid", DoubleType)
@@ -29,7 +27,7 @@ object WIN_writeToParquet {
         :: StructField("mode", IntegerType)
         :: StructField("ex", ByteType)
         :: StructField("mmid", StringType)
-                                :: Nil)
+        :: Nil)
 
     val dataDF = spark.read
       .option("header", "true")
@@ -37,8 +35,8 @@ object WIN_writeToParquet {
 
     val dataDF1 = dataDF.map(it => {
       (it.getString(0),
-      it.getString(1).substring(0,4) + "-" + it.getString(1).substring(4,6)+ "-" + it.getString(1).substring(6),
-        it.getString(2),
+        it.getString(1).substring(0,4) + "-" + it.getString(1).substring(4,6)+ "-" + it.getString(1).substring(6),
+        it.getString(1).substring(0,4) + "-" + it.getString(1).substring(4,6)+ "-" + it.getString(1).substring(6) + " "+it.getString(2),
         it.getString(3),
         it.getString(4),
         it.getString(5),
@@ -75,16 +73,16 @@ object WIN_writeToParquet {
       dataDF1.col("mmid").cast(StringType)
     )
 
-//    dataDF.select("date").
+    //    dataDF.select("date").
 
 
 
     println("==========SCHEMA==============")
-//    val data = dataDF2.as[TAQ]
+    //    val data = dataDF2.as[TAQ]
     dataDF2.printSchema()
     dataDF2.show()
     println("==========SCHEMA==============")
-    dataDF2.write.parquet("D:\\data\\t.csv\\20190412\\parq1")
+    dataDF2.write.mode(SaveMode.Overwrite).parquet("D:\\data\\t.csv\\20190412\\parq1")
 
   }
 

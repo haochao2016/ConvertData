@@ -24,8 +24,8 @@ object Avg_OFR_ByOFRSIZ {
     val origFrame = spark.read
 //      .option("header", "true")
 //     .parquet(s"hdfs://192.168.1.106:9000/chao/compData/orig/TAQ2007${args(0)}")
-      .parquet(s"hdfs://cnserver2:9000/chao/compData/TAQ2007${args(0)}")
-//      .parquet(s"hdfs://115.239.209.189:9000/chao/compData/TAQ20070816")
+//      .parquet(s"hdfs://cnserver2:9000/chao/compData/TAQ2007${args(0)}")
+      .parquet(s"hdfs://cnserver2:9000/chao/dolphindb/TAQ/TAQ2007${args(0)}")
 
     //     .parquet("D:\\data\\t.csv\\20190827-parquet")
 
@@ -57,7 +57,7 @@ object Avg_OFR_ByOFRSIZ {
 
     // =================================================================================================================
 //    b-1
-    val frame = spark.sql("select * from TAQ where SYMBOL ='IBM' and date = '20070810' and TIME >= '09:30:00'")
+    val frame = spark.sql("select * from TAQ where SYMBOL ='IBM' and date = '2007-08-10' and TIME >= '09:30:00'")
 //    b-2
 //    val frame =  spark.sql("select SYMBOL, TIME, BID from TAQ where SYMBOL in ('IBM', 'MSFT', 'GOOG', 'YHOO') and" +
 //                " date='20070810' and TIME between '09:30:00' and '09:30:59' and BID > 0 and OFR > BID")
@@ -73,7 +73,7 @@ object Avg_OFR_ByOFRSIZ {
 
 //    b-5
      /* val frame =  spark.sql("select SUBSTRING(TIME, 1 , POSITION(':' in TIME)-1) * 60  + SUBSTRING(TIME, POSITION(':' in TIME)+1 , 2) as minute ," +
-        " (max(OFR)-min(BID)) as gap from TAQ where date='20010803' and OFR>BID and BID>0 group by SYMBOL, minute" +
+        " (max(OFR)-min(BID)) as gap from TAQ where date='20070803' and OFR>BID and BID>0 group by SYMBOL, minute" +
         "")*/
 
 //    b-6

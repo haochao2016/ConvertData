@@ -1,5 +1,7 @@
 package com.dolphindb.importData
 
+import java.io.{File, PrintWriter}
+
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 
@@ -36,7 +38,12 @@ object WIN_ReadFromParquet {
     println("==========SCHEMA==============")
     dataDF.show()
 
+    val endTime = System.currentTimeMillis()
 
+    val writer = new PrintWriter(new File("D:\\tmp\\scala\\writer.txt"))
+      writer.append("time ;  ("+ (endTime-startTime)+")")
+      writer.close()
+    spark.stop()
 
 
 
