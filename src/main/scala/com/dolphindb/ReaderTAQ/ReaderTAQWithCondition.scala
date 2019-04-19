@@ -69,25 +69,18 @@ object ReaderTAQWithCondition {
     //    b-4
 //     val frame = spark.sql("select minute(TIME) as minute " +
 //                       " , avg(OFR) as  spread " +
-//                       "from TAQ where date= to_date('2007-08-01') and time >= to_timestamp('2019-04-12 09:30:00') and time <= to_timestamp('2019-04-12 16:00:00') " +
+//                       "from TAQ where date= to_date('2007-08-01') and symbol='IBM' and time >= to_timestamp('2019-04-12 09:30:00') and time <= to_timestamp('2019-04-12 16:00:00') " +
 //                       "  group by minute ")
-//                       "  ")
 
     //    b-5
-     val frame =  spark.sql("" +
+//     val frame =  spark.sql("" +
 //       "select minute(TIME) as minute  ," +
-       " select SUBSTRING(TIME, 12 , 2) * 60  + SUBSTRING(TIME, 15 , 2) as minute, " +
-       " (max(OFR)-min(BID)) as gap from TAQ where date=to_date('2007-08-03') and OFR>BID and BID>0 group by SYMBOL, minute" )
+//       " (max(OFR)-min(BID)) as gap from TAQ where date=to_date('2007-08-03')and symbol='IBM' and OFR>BID and BID>0 group by SYMBOL, minute" )
 
     //    b-6
-    /*val frame =  spark.sql("select DATE , SUBSTRING(TIME, 1 , POSITION(':' in TIME)-1) * 60  + SUBSTRING(TIME, POSITION(':' in TIME)+1 , 2)" +
+    val frame =  spark.sql("select DATE , minute(TIME) " +
             " as minute ,avg(OFR + BID)/ 2 " +
-            " as mid from TAQ where SYMBOL ='IBM' and time >= '09:30:00' and time <= '16:00:00' group by date,  minute")*/
-
-    /*    val frame1 =  spark.sql("select DATE ,  POSITION(':' in TIME), SUBSTRING(TIME, 1 , POSITION(':' in TIME)-1),  length(TIME),  POSITION(':', REVERSE(TIME))," +
-    //                          "SUBSTRING(TIME, POSITION(':' in TIME)+1 ,length(TIME)-  POSITION(':', REVERSE(TIME)) )," +
-                              "SUBSTRING(TIME, POSITION(':' in TIME)+1 ,2)" +
-                              "from TAQ " )*/
+            " as mid from TAQ where SYMBOL ='IBM' and bid >= 50 and bid <= 90 group by date,  minute")
 
 
     //    7   未完成
@@ -101,12 +94,12 @@ object ReaderTAQWithCondition {
 
 
     //    b-8
-    /*val frame =  spark.sql("select sum(BID * BIDSIZ)/sum(BIDSIZ) as vwab from TAQ group by DATE, SYMBOL having sum(BIDSIZ) > 0" +
-         "  order by Date desc , SYMBOL  ")*/
+//    val frame =  spark.sql("select sum(BID * BIDSIZ)/sum(BIDSIZ) as vwab from TAQ group by DATE, SYMBOL having sum(BIDSIZ) > 0" +
+//         "  order by Date desc , SYMBOL  ")
 
 
 
-    frame.foreachPartition(x => println( " partition : " + TaskContext.getPartitionId()))
+//    frame.foreachPartition(x => println( " partition : " + TaskContext.getPartitionId()))
     frame.show()
 
 

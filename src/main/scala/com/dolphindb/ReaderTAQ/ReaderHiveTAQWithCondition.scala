@@ -32,24 +32,23 @@ object ReaderHiveTAQWithCondition {
 //        val frame = spark.sql("select * from TAQ where date = to_date('2007-08-10') and SYMBOL = 'EBAY' order by (OFR-BID) desc ")
     //    b-4
 //     val frame = spark.sql("select minute(time) as minute " +
-//     //  " , avg((OFR + BID)/(OFR-BID)) as  spread " +
 //       " , avg(OFR) as  spread " +
-//       "from TAQ where date= to_date('2007-08-01') and time >= to_timestamp('2007-08-01 09:30:00') and time <= to_timestamp('2007-08-01 16:00:00') " +
+//       "from TAQ where date= to_date('2007-08-01') and symbol='IBM' and time >= to_timestamp('2007-08-01 09:30:00') and time <= to_timestamp('2007-08-01 16:00:00') " +
 //       " group by minute ")
 
     //    b-5
-     val frame =  spark.sql("select minute(time) as minute  ," +
-       " (max(OFR)-min(BID)) as gap from TAQ where date= to_date('2007-08-03') and OFR>BID and BID>0 group by SYMBOL, minute"  )
+//     val frame =  spark.sql("select minute(time) as minute  ," +
+//       " (max(OFR)-min(BID)) as gap from TAQ where date= to_date('2007-08-03') and symbol='IBM'  and OFR>BID and BID>0 group by SYMBOL, minute"  )
 
 
     //    b-6
-    /* val frame =  spark.sql("select DATE , SUBSTRING(TIME, 1 , POSITION(':' in TIME)-1) * 60  + SUBSTRING(TIME, POSITION(':' in TIME)+1 , 2)" +
-       " as minute ,avg(OFR + BID)/ 2 " +
-       " as mid from TAQ where SYMBOL ='IBM' and time >= '09:30:00' and time <= '16:00:00' group by date,  minute")*/
+//     val frame =  spark.sql("select DATE , minute(time) as minute ," +
+//       " avg(OFR + BID)/ 2 " +
+//       " as mid from TAQ where SYMBOL ='IBM' and bid >= 50 and bid <= 90 group by date,  minute")
 
     //    b-8
-    //    val frame =  spark.sql("select sum(BID * BIDSIZ)/sum(BIDSIZ) as vwab from TAQ group by DATE, SYMBOL having sum(BIDSIZ) > 0" +
-    //      "  order by Date desc , SYMBOL   ")
+        val frame =  spark.sql("select sum(BID * BIDSIZ)/sum(BIDSIZ) as vwab from TAQ group by DATE, SYMBOL having sum(BIDSIZ) > 0" +
+          "  order by Date desc , SYMBOL   ")
 
 
     println("=============================================")
