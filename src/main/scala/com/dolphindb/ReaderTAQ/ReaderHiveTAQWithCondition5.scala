@@ -1,20 +1,15 @@
 package com.dolphindb.ReaderTAQ
 
-import org.apache.spark.TaskContext
 import org.apache.spark.sql.SparkSession
 
-object ReaderHiveTAQWithCondition {
+object ReaderHiveTAQWithCondition5 {
 
   def main(args: Array[String]): Unit = {
 
     val beginTime = System.currentTimeMillis()
     println("起始时间   ====>   " + beginTime)
 
-    val spark = SparkSession.builder().appName("ReaderHiveTAQWithCondition")
-      //      .master("local[2]")
-      //      .config("spark.scheduler.mode", "FAIR")
-      //      .config("spark.scheduler.pool", "spark-d")
-      //      .config("spark.scheduler.allocation.file", "/home/chao/apps/spark/spark-2.3.1-bin-hadoop2.7/conf/fairscheduler.xml")
+    val spark = SparkSession.builder().appName("ReaderHiveTAQWithCondition5")
       .enableHiveSupport()
       .config("spark.sql.warehouse.dir","hdfs://chao/hive/warehouse")
       .getOrCreate()
@@ -23,7 +18,7 @@ object ReaderHiveTAQWithCondition {
     //    ======================================================================================
     //    b-1
 //    val frame = spark.sql("select * from TAQ where SYMBOL ='IBM' and date = to_date('2007-08-10')" +
-//                                " and TIME >= to_timestamp('2007-08-10 09:30:00')"
+//                                " and TIME >= to_timestamp('2007-08-10 09:30:00')")
     //      b-2
 //          val frame =  spark.sql("select SYMBOL, TIME, BID from TAQ where SYMBOL in ('IBM', 'MSFT', 'GOOG', 'YHOO') and date = " +
 //                  " to_date('2007-08-10') and TIME between to_timestamp('2007-08-10 09:30:00') and to_timestamp('2007-08-10 09:30:59') and BID > 0 and OFR > BID")
@@ -37,8 +32,8 @@ object ReaderHiveTAQWithCondition {
 //       " group by minute ")
 
     //    b-5
-//     val frame =  spark.sql("select minute(time) as minute  ," +
-//       " (max(OFR)-min(BID)) as gap from TAQ where date= to_date('2007-08-03') and symbol='IBM'  and OFR>BID and BID>0 group by SYMBOL, minute"  )
+     val frame =  spark.sql("select minute(time) as minute  ," +
+       " (max(OFR)-min(BID)) as gap from TAQ where date= to_date('2007-08-03') and symbol='IBM'  and OFR>BID and BID>0 group by SYMBOL, minute"  )
 
 
     //    b-6
@@ -47,9 +42,8 @@ object ReaderHiveTAQWithCondition {
 //       " as mid from TAQ where SYMBOL ='IBM' and bid >= 50 and bid <= 90 group by date,  minute")
 
     //    b-8
-        val frame =  spark.sql("select sum(BID * BIDSIZ)/sum(BIDSIZ) as vwab from TAQ group by DATE, SYMBOL having sum(BIDSIZ) > 0" +
-          "  order by Date desc , SYMBOL   ")
-
+//        val frame =  spark.sql("select sum(BID * BIDSIZ)/sum(BIDSIZ) as vwab from TAQ group by DATE, SYMBOL having sum(BIDSIZ) > 0" +
+//          "  order by Date desc , SYMBOL   ")
 
     println("=============================================")
     frame.show()
