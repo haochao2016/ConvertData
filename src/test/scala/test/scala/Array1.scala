@@ -11,7 +11,9 @@ object Array1 {
     val date = LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyyMMdd"))
     println(date)
 
-
+    val strings = Array("1231")
+    strings ++ Array("324")
+    strings.foreach(println)
 
 
   }
