@@ -1,7 +1,7 @@
 package test.dolphindb
 
 import com.xxdb.DBConnection
-import com.xxdb.data.{BasicAnyVector, BasicDateVector, BasicString, BasicTable, Vector}
+import com.xxdb.data.{BasicAnyVector, BasicDateVector, BasicString, BasicStringVector, BasicTable, Vector}
 
 object dolphindbchemafeature {
 
@@ -20,7 +20,7 @@ object dolphindbchemafeature {
     val loginVal = conn.connect(ip, port, user, passwd)
 
     val stab = s"${table} = database('${dbPath}').loadTable('${table}');schema(${table}).partitionColumnName"
-    val tblen = conn.run(stab).asInstanceOf[BasicString]
+    val tblen = conn.run(stab).asInstanceOf[BasicStringVector]
 
     println(tblen)
 
