@@ -2,13 +2,14 @@ package com.dolphindb.ReaderTAQ
 
 import org.apache.spark.TaskContext
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.storage.StorageLevel
 
 object ReaderTAQWithCondition {
 
+
   def main(args: Array[String]): Unit = {
 
-    val beginTime = System.currentTimeMillis()
-    println("起始时间   ====>   " + beginTime)
+
 
     val spark = SparkSession.builder().appName("ReaderTAQWithCondition")
       //      .master("local[2]")
@@ -57,7 +58,20 @@ object ReaderTAQWithCondition {
 
     // =================================================================================================================
     //    b-1
-//    val frame = spark.sql("select * from TAQ where SYMBOL ='IBM' and date = to_date('2007-08-10') and TIME >= to_timestamp('2019-04-12 09:30:00')")
+    val frame = spark.sql("select * from TAQ where SYMBOL ='IBM' and date = to_date('2007-08-10') and TIME >= to_timestamp('2019-04-12 09:30:00')")
+
+    val framePer = frame.cache()
+    frame.show()
+
+
+    framePer.createTempView("frame")
+
+
+    val perRes = spark.sql( """ select avg(bid) from frame
+      |
+    """.stripMargin)
+
+
     //    b-2
 //        val frame =  spark.sql("select SYMBOL, TIME, BID from TAQ where SYMBOL in ('IBM', 'MSFT', 'GOOG', 'YHOO') and" +
 //                    " date=to_date('2007-08-10') and TIME between to_timestamp('2019-04-12 09:30:00') and" +
@@ -78,9 +92,9 @@ object ReaderTAQWithCondition {
 //       " (max(OFR)-min(BID)) as gap from TAQ where date=to_date('2007-08-03')and symbol='IBM' and OFR>BID and BID>0 group by SYMBOL, minute" )
 
     //    b-6
-    val frame =  spark.sql("select DATE , minute(TIME) " +
-            " as minute ,avg(OFR + BID)/ 2 " +
-            " as mid from TAQ where SYMBOL ='IBM' and bid >= 50 and bid <= 90 group by date,  minute")
+//    val frame =  spark.sql("select DATE , minute(TIME) " +
+//            " as minute ,avg(OFR + BID)/ 2 " +
+//            " as mid from TAQ where SYMBOL ='IBM' and bid >= 50 and bid <= 90 group by date,  minute")
 
 
     //    7   未完成
@@ -100,15 +114,14 @@ object ReaderTAQWithCondition {
 
 
 //    frame.foreachPartition(x => println( " partition : " + TaskContext.getPartitionId()))
-    frame.show()
-
-
+    perRes.show()
+    val beginTime = System.currentTimeMillis()
+    println("起始时间   ====>   " + beginTime)
+    spark.sql("select avg(bid),sum(ofr) from frame").show()
 
     val endTime  = System.currentTimeMillis()
     println("结束时间   ====>   " +endTime)
     println("所有时间   ====>   " + (endTime-beginTime))
-
-
     spark.stop()
 
 

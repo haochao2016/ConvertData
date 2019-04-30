@@ -23,7 +23,7 @@ object WIN_TableTempTAQ {
 
 //    val frame = spark.sql("select * from csvv where OFRSIZ = 0")
 
-    val frame = spark.sql("select avg(OFR),OFRSIZ from csvv group by OFRSIZ")
+    val frame = spark.sql("select avg(OFR) + 1,OFRSIZ from csvv group by OFRSIZ")
     frame.show()
 
 

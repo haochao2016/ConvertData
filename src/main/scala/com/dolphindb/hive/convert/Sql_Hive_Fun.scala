@@ -47,7 +47,7 @@ object Sql_Hive_Fun {
 
 //    b-5
      /* val frame =  spark.sql("select SUBSTRING(TIME, 1 , POSITION(':' in TIME)-1) * 60  + SUBSTRING(TIME, POSITION(':' in TIME)+1 , 2) as minute ," +
-        " (max(OFR)-min(BID)) as gap from TAQ where date='20010803' and OFR>BID and BID>0 group by SYMBOL, minute" +
+        " (max(OFR)-min(BID)) as gap from TAQ where date='20070803' and OFR>BID and BID>0 group by SYMBOL, minute" +
         "")*/
 
 

@@ -61,7 +61,7 @@ object Linux_writeToParquet3 {
       println("==========SCHEMA==============")
       dataDF2.printSchema()
       println("==========SCHEMA==============")
-      dataDF2.write.parquet(s"hdfs://cnserver2:9000/chao/dolphindb/TAQ/TAQ2007${hdd}")
+      dataDF2.write.parquet(s"hdfs://cnserver2:9000/chao/dolphindb/TAQ2/TAQ2007${hdd}")
     }
 
     val endTime = System.currentTimeMillis()
