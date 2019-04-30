@@ -17,14 +17,16 @@ object testMysql {
 
     val url = "jdbc:mysql://115.239.209.189:3306/spark-conn?user=root&password=123456"
     val frame = spark.read
-              .option("partitionColumn", "id")
-            .option("lowerBound", 0)
-            .option("upperBound", 6)
-            .option("numPartitions", 3)
+//              .option("partitionColumn", "id")
+//            .option("lowerBound", 0)
+//            .option("upperBound", 6)
+//            .option("numPartitions", 3)
             .jdbc(url, "mysqlConn", new Properties())
 //      .jdbc(url, "taq", new Properties())
     //    spark.read.jdbc
     frame.printSchema()
+
+    val frame1 = spark.read.jdbc(url, "person", new Properties())
 
     //    frame.select("id").show()
 
@@ -39,9 +41,13 @@ object testMysql {
 
     frame.createOrReplaceTempView("frame")
     //    spark.sql("select * from frame where date1 <'2019-04-03'").show()
-    val mysqlframe = spark.sql("select * from frame where id > '3' or id < '5' and name < '6'")
-//    val mysqlframe = spark.sql("select * from frame where id in('1','2','4')")
+//    val mysqlframe = spark.sql("select * from frame where (id > '3' or id < '5') and name < '8'")
+//    val mysqlframe = spark.sql("select * from frame where name > '2'")
+
+    frame1.createOrReplaceTempView("frame1")
+    val mysqlframe = spark.sql("SELECT * from frame, frame1 WHERE frame1.id = frame.id")
     mysqlframe.show()
+
 
     frame.foreachPartition(x => println("分区 ; " + TaskContext.getPartitionId()))
     val endTime = System.currentTimeMillis()

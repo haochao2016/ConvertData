@@ -8,8 +8,8 @@ object testDolphinDBJAR {
 
 
   def main(args: Array[String]): Unit = {
-//    readerDB()
-    writer()
+    readerDB()
+//    writer()
   }
 
 
@@ -111,13 +111,13 @@ object testDolphinDBJAR {
       partitionSchema.rows()
       println("===============23423423===============================")
       for (i <- 0  until(partitionSchema.rows())) {
-        println(partitionSchema.get(i))
+//        println(partitionSchema.get(i))
       }
 
 //      val sqldata11 = s"select bid , time from taq1 where date=${partitionSchema.get(30)}"
 //      val sqltad = conn.run(sqldata11).asInstanceOf[BasicTable]
 
-      val dfas =  conn.run(s"schema(taq1).partitionColumnName").asInstanceOf[Scalar]
+      val dfas =  conn.run(s"schema(taq1).partitionColumnName").asInstanceOf[BasicStringVector]
       println(dfas)
       println("================2342342342==============================")
 
@@ -137,40 +137,16 @@ object testDolphinDBJAR {
       println("==============")
 
 
-      val sqldata = s"select bid , time from taq1 where date=2007.08.10, symbol='IBM'"
+      val sqldata = s"select * from taq1 where date=2007.08.10, symbol='IBM'"
       val tabledata = conn.run(sqldata).asInstanceOf[BasicTable]
-
-      println(tabledata)
-
-      val nameDS = tabledata.getColumnName(1)
-
-      println(" nameDS  " + nameDS)
-      val dataType = tabledata.getDataType
-      println("  dataType   " + dataType)
-      val timedata = tabledata.getColumn("time")
-      println("timedata" + timedata)
-
-      val DataForm = tabledata.getDataForm
-      println("DataForm" + tabledata.getDataForm)
-
-      val DataCategory = tabledata.getDataCategory
-      println("DataCategory" + tabledata.getDataCategory)
-
-      val column1 = tabledata.getColumn(0)
-
-      println(" column1 " + column1.get(1))
-      println("  column1    " + column1)
-      println("===================")
-      val iterator = Iterator(tabledata)
-      while (iterator.hasNext) {
-        println(iterator.next())
+      println( " all count :" + tabledata.rows())
+      for  (i <- 0 until(tabledata.rows())) {
+        for (j <- 0 until(tabledata.columns())){
+          print(tabledata.getColumn(j).get(i))
+          print("\t")
+        }
+        println
       }
-
-      val sqldata1 = s"select count(*) from taq1 where date=2007.08.10, symbol='IBM'"
-      val tabledata1 = conn.run(sqldata1).asInstanceOf[BasicTable]
-      println("  tabledata1   " + tabledata1)
-
-      println("  tabledata1  val " + tabledata1.getColumn(0).get(0))
     }
 
   }
