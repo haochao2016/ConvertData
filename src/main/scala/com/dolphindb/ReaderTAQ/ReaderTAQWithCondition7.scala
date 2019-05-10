@@ -58,10 +58,10 @@ object ReaderTAQWithCondition7 {
 
 
     //    b-8
-    val frame =  spark.sql("select sum(BID * BIDSIZ)/sum(BIDSIZ) as vwab from TAQ group by DATE, SYMBOL having sum(BIDSIZ) > 0" +
-         "  order by Date desc , SYMBOL  ")
+//    val frame =  spark.sql("select sum(BID * BIDSIZ)/sum(BIDSIZ) as vwab from TAQ group by DATE, SYMBOL having sum(BIDSIZ) > 0" +
+//         "  order by Date desc , SYMBOL  ")
 
-
+    val frame = spark.sql("""select sum(bid*bidsiz)/sum(bidsiz) as vwab , minute(time) minn from TAQ group by minn, symbol having sum(bidsiz)>0 order by minn desc, symbol""")
 
 //    frame.foreachPartition(x => println( " partition : " + TaskContext.getPartitionId()))
     frame.show()
